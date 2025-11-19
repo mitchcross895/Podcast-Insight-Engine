@@ -23,24 +23,37 @@ class EmbeddingGenerator:
         self.dimension = self.model.get_sentence_embedding_dimension()
         print(f"Model loaded. Embedding dimension: {self.dimension}")
         
-    def generate_embeddings(self, texts: List[str], batch_size: int = 32) -> np.ndarray:
-        """
-        Generate embeddings for a list of texts
-        """
-        print(f"Generating embeddings for {len(texts)} texts...")
-        
-        # Filter out empty texts
-        valid_texts = [t if t else "" for t in texts]
-        
-        # Generate embeddings with progress bar
-        embeddings = self.model.encode(
-            valid_texts,
-            batch_size=batch_size,
-            show_progress_bar=True,
-            convert_to_numpy=True
-        )
-        
-        return embeddings
+def generate_embeddings(self, data, batch_size: int = 32):
+    """
+    Generate embeddings for texts
+    Args:
+        data: Either a list of texts or a DataFrame with 'text' column
+        batch_size: Batch size for processing
+    Returns:
+        tuple: (embeddings array, list of texts)
+    """
+    # Handle DataFrame input
+    if isinstance(data, pd.DataFrame):
+        if 'text' not in data.columns:
+            raise ValueError("DataFrame must have 'text' column")
+        texts = data['text'].tolist()
+    else:
+        texts = data
+    
+    print(f"Generating embeddings for {len(texts)} texts...")
+    
+    # Filter out empty texts
+    valid_texts = [str(t) if pd.notna(t) else "" for t in texts]
+    
+    # Generate embeddings with progress bar
+    embeddings = self.model.encode(
+        valid_texts,
+        batch_size=batch_size,
+        show_progress_bar=True,
+        convert_to_numpy=True
+    )
+    
+    return embeddings, valid_texts
     
     def save_embeddings(self, embeddings: np.ndarray, filepath: str):
         """
