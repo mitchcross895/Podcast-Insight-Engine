@@ -400,7 +400,7 @@ This is a portfolio/educational project. Feel free to:
 
 ## License
 
-This project is for educational purposes. The This American Life transcripts are subject to their own copyright and terms of use.
+This project is for educational purposes. The **This American Life** transcripts are subject to their own copyright and terms of use.
 
 ## Acknowledgments
 
